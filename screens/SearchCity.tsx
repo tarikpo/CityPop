@@ -1,6 +1,15 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {KeyboardAvoidingView, StyleSheet, View, ScrollView} from 'react-native';
+import {
+    KeyboardAvoidingView,
+    StyleSheet,
+    View,
+    ScrollView,
+    Dimensions,
+    TouchableOpacity,
+    Pressable, FlatList, LayoutChangeEvent,
+
+} from 'react-native';
 import {MainStackScreenProps} from '../types';
 import ScreenTitle from "../components/ScreenTitle";
 import Button from "../components/Button";
@@ -51,30 +60,49 @@ interface city {
 
 export default function SearchCity({navigation}: MainStackScreenProps<'SearchCity'>) {
     const [city, setCity] = useState<city | null>(null);
+    const [keyboardUp, setKeyboardUp] = useState<boolean>(false);
+    const [titleHeight, setTitleHeight] = useState<number>(0);
+
+    const screenTitleProps:any ={};
+    if (keyboardUp){
+        screenTitleProps["fontSize"]=20;
+        screenTitleProps["paddingBottom"]=5;
+
+    }
+
+
 
     return (
         <KeyboardAvoidingView
-            style={styles.avoidView}
-            behavior={"height"}
+            style={keyboardUp? [styles.avoidView,  {paddingTop:titleHeight*1.1}] : styles.avoidView}
+            behavior={"position"}
         >
         <View
             style={styles.container}
         >
 
-            <ScreenTitle text={"SEARCH BY CITY"}/>
+            <ScreenTitle
+                onLayout={(event) => {
+                    const {height} = event.nativeEvent.layout;
+                    setTitleHeight(height);
+
+                }}
+                text={"SEARCH BY CITY"}
+                { ...screenTitleProps}
+            />
 
                 <SearchableDropdown
+
                     selectedItems={city}
                     onItemSelect={(item: city) => {
+                        setKeyboardUp(false);
                         setCity(item);
-                        alert(item.id);
                     }}
                     containerStyle={styles.itemsContainer}
                     itemStyle={styles.item}
                     itemTextStyle={{color: '#222'}}
                     itemsContainerStyle={styles.itemContainer}
                     items={items}
-                    defaultIndex={1}
                     resetValue={false}
                     textInputProps={
                         {
@@ -86,7 +114,14 @@ export default function SearchCity({navigation}: MainStackScreenProps<'SearchCit
                                 borderColor: '#ccc',
                                 borderRadius: 5,
                             },
+                            onPressIn: () => {
+                                setCity(null);
+                                setKeyboardUp(true);
+                            }
+
                         }
+
+
                     }
                     listProps={
                         {
@@ -94,29 +129,32 @@ export default function SearchCity({navigation}: MainStackScreenProps<'SearchCit
                         }
                     }
                 />
-                <Button text={"sök"} onPress={() => alert("söker")}/>
-        </View>
+            {city&&<Button text={"sök"} onPress={() => alert("söker")}/>}
+
+        </View >
         </KeyboardAvoidingView>
 
     );
 }
 
+const width = Dimensions.get("window").width;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "white",
         alignItems: 'center',
         justifyContent: 'flex-start',
-        padding: 5,
+        width:width,
 
     },
     avoidView: {
         flex: 1,
         alignItems: 'center',
+        width:"100%",
         justifyContent: 'flex-start',
         backgroundColor: "white",
 
     },
+
     itemsContainer: {
         width: "90%",
         maxWidth: 500,
@@ -125,8 +163,7 @@ const styles = StyleSheet.create({
     itemContainer: {
         marginTop: 2,
         width: "100%",
-        backgroundColor: "yellow",
-        height: 150,
+        maxHeight: 300,
         borderRadius: 5,
     },
     item: {
