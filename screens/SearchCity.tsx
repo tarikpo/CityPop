@@ -1,56 +1,22 @@
 import * as React from 'react';
 import {useState} from 'react';
 import {
+    ActivityIndicator,
+    Dimensions,
+    Keyboard,
     KeyboardAvoidingView,
     StyleSheet,
+    TextInput,
     View,
-    ScrollView,
-    Dimensions,
-    TouchableOpacity,
-    Pressable, FlatList, LayoutChangeEvent,
-
+    Alert
 } from 'react-native';
 import {MainStackScreenProps} from '../types';
 import ScreenTitle from "../components/ScreenTitle";
 import Button from "../components/Button";
 // @ts-ignore
-import SearchableDropdown from "react-native-searchable-dropdown";
 
+const API_URL = "http://api.geonames.org/searchJSON?&orderby=population&featureClass=P&maxRows=1&style=long&username=weknowit&name_equals="
 
-var items = [
-    {
-        id: 1,
-        name: 'JavaScript',
-    },
-    {
-        id: 2,
-        name: 'Java',
-    },
-    {
-        id: 3,
-        name: 'Ruby',
-    },
-    {
-        id: 4,
-        name: 'React Native',
-    },
-    {
-        id: 5,
-        name: 'PHP',
-    },
-    {
-        id: 6,
-        name: 'Python',
-    },
-    {
-        id: 7,
-        name: 'Go',
-    },
-    {
-        id: 8,
-        name: 'Swift',
-    },
-];
 
 interface city {
     id: number,
@@ -62,80 +28,102 @@ export default function SearchCity({navigation}: MainStackScreenProps<'SearchCit
     const [city, setCity] = useState<city | null>(null);
     const [keyboardUp, setKeyboardUp] = useState<boolean>(false);
     const [titleHeight, setTitleHeight] = useState<number>(0);
+    const [txtInput, setTxtInput] = useState<string>("");
+    const [fetching, setFetching] = useState<boolean>(false);
 
-    const screenTitleProps:any ={};
-    if (keyboardUp){
-        screenTitleProps["fontSize"]=20;
-        screenTitleProps["paddingBottom"]=5;
+    const screenTitleProps: any = {};
+    if (keyboardUp) {
+        screenTitleProps["fontSize"] = 20;
+        screenTitleProps["paddingBottom"] = 5;
 
     }
 
 
+    const lookUp = () => {
+        setFetching(true);
+        setKeyboardUp(false);
+        Keyboard.dismiss();
+
+        let url = API_URL + txtInput;
+        fetch(url)
+            .then((response)=>response.json())
+            .then((json)=>{
+                if(json.totalResultsCount==0){
+                    alert("The city does not exist in our database")
+                }else if(json.totalResultsCount>0){
+                    //Example input is "Bok"
+                    if (json.geonames[0].name !== txtInput){
+                        Alert.alert(
+                            "We did not find "+txtInput,
+                            "Did you mean "+json.geonames[0].name+"?",
+                            [
+                                // The "Yes" button
+                                {
+                                    text: "Yes",
+                                    onPress: () => {
+                                        navigation.navigate("City", {
+                                                cityName:json.geonames[0].name,
+                                                cityPopulation:json.geonames[0].population
+                                        });
+                                    },
+                                },
+                                // The "No" button
+                                // Does nothing but dismiss the dialog when tapped
+                                {
+                                    text: "No",
+                                },
+                            ]
+                        );
+                    }else{
+                        navigation.navigate("City", {
+                            cityName:json.geonames[0].name,
+                            cityPopulation:json.geonames[0].population
+                        });
+                    }
+
+                }
+            })
+            .catch((error)=> alert(error))
+            .finally(()=>{
+                setFetching(false)
+            });
+    }
+
 
     return (
         <KeyboardAvoidingView
-            style={keyboardUp? [styles.avoidView,  {paddingTop:titleHeight*1.1}] : styles.avoidView}
+            style={keyboardUp ? [styles.avoidView, {paddingTop: titleHeight * 1.1}] : styles.avoidView}
             behavior={"position"}
         >
-        <View
-            style={styles.container}
-        >
+            <View
+                style={styles.container}
+            >
 
-            <ScreenTitle
-                onLayout={(event) => {
-                    const {height} = event.nativeEvent.layout;
-                    setTitleHeight(height);
+                <ScreenTitle
+                    onLayout={(event) => {
+                        const {height} = event.nativeEvent.layout;
+                        setTitleHeight(height);
 
-                }}
-                text={"SEARCH BY CITY"}
-                { ...screenTitleProps}
-            />
-
-                <SearchableDropdown
-
-                    selectedItems={city}
-                    onItemSelect={(item: city) => {
-                        setKeyboardUp(false);
-                        setCity(item);
                     }}
-                    containerStyle={styles.itemsContainer}
-                    itemStyle={styles.item}
-                    itemTextStyle={{color: '#222'}}
-                    itemsContainerStyle={styles.itemContainer}
-                    items={items}
-                    resetValue={false}
-                    textInputProps={
-                        {
-                            placeholder: "Enter a city",
-                            underlineColorAndroid: "transparent",
-                            style: {
-                                padding: 12,
-                                borderWidth: 1,
-                                borderColor: '#ccc',
-                                borderRadius: 5,
-                            },
-                            onPressIn: () => {
-                                setCity(null);
-                                setKeyboardUp(true);
-                            }
-
-                        }
-
-
-                    }
-                    listProps={
-                        {
-                            nestedScrollEnabled: true,
-                        }
-                    }
+                    text={"SEARCH BY CITY"}
+                    {...screenTitleProps}
                 />
-            {city&&<Button text={"sök"} onPress={() => alert("söker")}/>}
 
-        </View >
+                <TextInput onPressIn={() => {
+                    setKeyboardUp(true);
+                }}
+                           onChangeText={(text)=>setTxtInput(text)}
+                           placeholder={"Enter a city..."}
+                           style={styles.input}/>
+
+                {txtInput.length>0 && <Button disabled={fetching} text={fetching?"Hold on...":"Look up!"} onPress={lookUp}/>}
+
+            </View>
         </KeyboardAvoidingView>
 
     );
 }
+
 
 const width = Dimensions.get("window").width;
 const styles = StyleSheet.create({
@@ -143,37 +131,24 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        width:width,
+        width: width,
 
     },
     avoidView: {
         flex: 1,
         alignItems: 'center',
-        width:"100%",
+        width: "100%",
         justifyContent: 'flex-start',
         backgroundColor: "white",
 
     },
-
-    itemsContainer: {
-        width: "90%",
-        maxWidth: 500,
-
-    },
-    itemContainer: {
-        marginTop: 2,
-        width: "100%",
-        maxHeight: 300,
-        borderRadius: 5,
-    },
-    item: {
-        padding: 10,
-        marginTop: 2,
-        borderColor: 'black',
+    input: {
         borderWidth: 1,
-        flex: 1,
-        width: "100%",
-        borderRadius: 5,
+        borderColor: "black",
+        width: "90%",
+        padding: 15,
+        marginVertical: 10,
+        fontSize: 20,
     }
 
 

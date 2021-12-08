@@ -15,7 +15,10 @@ declare global {
 
 export type MainStackParamList = {
   Home: undefined;
-  City: undefined;
+  City:{
+    cityName:string,
+    cityPopulation:number
+  },
   CountryCities: undefined;
   SearchCity: undefined;
   SearchCountry: undefined;

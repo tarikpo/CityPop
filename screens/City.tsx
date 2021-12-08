@@ -4,10 +4,12 @@ import { Text, View } from '../components/Themed';
 
 import { MainStackScreenProps } from '../types';
 
-export default function City({ navigation }: MainStackScreenProps<'City'>) {
+export default function City({ route,navigation }: MainStackScreenProps<'City'>) {
+    const {cityName,cityPopulation} = route.params;
+
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>City.</Text>
+            <Text style={styles.title}>City {cityName} has {cityPopulation} people living in it.</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.link}>
                 <Text style={styles.linkText}>Go to home screen!</Text>
             </TouchableOpacity>

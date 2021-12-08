@@ -8,11 +8,12 @@ import {Text, View} from './Themed';
 interface Props{
     text: string,
     onPress: () => void,
+    disabled?:boolean
 }
 
-const Button: React.FC<Props> = ({text, onPress}) =>{
+const Button: React.FC<Props> = ({text, onPress , disabled=false}) =>{
     return (
-        <TouchableOpacity onPress={onPress} style={styles.container}>
+        <TouchableOpacity disabled={disabled} onPress={onPress} style={disabled?[styles.container,{backgroundColor:"grey"}]:styles.container}>
             <Text style={styles.btnText} lightColor={Colors.light.tint}>
                 {text.toUpperCase()}
             </Text>
