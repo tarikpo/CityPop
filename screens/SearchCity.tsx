@@ -108,13 +108,14 @@ export default function SearchCity({navigation}: MainStackScreenProps<'SearchCit
                     text={"SEARCH BY CITY"}
                     {...screenTitleProps}
                 />
-
                 <TextInput onPressIn={() => {
                     setKeyboardUp(true);
                 }}
                            onChangeText={(text)=>setTxtInput(text)}
                            placeholder={"Enter a city..."}
                            style={styles.input}/>
+
+                {fetching && <ActivityIndicator style={styles.loading} size={"large"}/>}
 
                 {txtInput.length>0 && <Button disabled={fetching} text={fetching?"Hold on...":"Look up!"} onPress={lookUp}/>}
 
@@ -134,6 +135,9 @@ const styles = StyleSheet.create({
         width: width,
 
     },
+    loading:{
+      margin:20
+    },
     avoidView: {
         flex: 1,
         alignItems: 'center',
@@ -147,6 +151,7 @@ const styles = StyleSheet.create({
         borderColor: "black",
         width: "90%",
         padding: 15,
+        maxWidth:500,
         marginVertical: 10,
         fontSize: 20,
     }
