@@ -20,11 +20,15 @@ const ScreenTitle: React.FC<Props> = ({text}) =>{
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        marginHorizontal: 50,
-        padding:15,
+        width: "100%",
+        padding:100,
     },
     text: {
         marginVertical: 7,
+        fontSize: 42,
+        fontWeight:"600",
+        color: "black",
+
     },
 });
 
