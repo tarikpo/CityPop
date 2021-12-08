@@ -9,7 +9,11 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
-import NotFoundScreen from '../screens/NotFoundScreen';
+import Home from '../screens/Home';
+import City from '../screens/City';
+import CountryCities from '../screens/CountryCities';
+import SearchCity from '../screens/SearchCity';
+import SearchCountry from '../screens/SearchCountry';
 import { MainStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -30,7 +34,11 @@ const Stack = createNativeStackNavigator<MainStackParamList>();
 function MainNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="Home" component={Home} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="SearchCity" component={SearchCity} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="SearchCountry" component={SearchCountry} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="CountryCities" component={CountryCities} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="City" component={City} options={{ title: 'Oops!' }} />
 
     </Stack.Navigator>
   );
