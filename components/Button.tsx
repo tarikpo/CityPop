@@ -23,11 +23,15 @@ const Button: React.FC<Props> = ({text, onPress}) =>{
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
+        backgroundColor: 'black',
+        width:"90%",
+        maxWidth:500,
         marginHorizontal: 50,
-        padding:15,
+        padding:25,
+        margin:10,
     },
     btnText: {
-        marginVertical: 7,
+        color: "white",
     },
 });
 
