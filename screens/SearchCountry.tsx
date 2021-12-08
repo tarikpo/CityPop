@@ -4,7 +4,7 @@ import { Text, View } from '../components/Themed';
 
 import { MainStackScreenProps } from '../types';
 
-export default function NotFoundScreen({ navigation }: MainStackScreenProps<'SearchCountry'>) {
+export default function SearchCountry({ navigation }: MainStackScreenProps<'SearchCountry'>) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Not found.</Text>

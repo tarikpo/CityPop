@@ -6,7 +6,7 @@ import Button from '../components/Button';
 
 import { MainStackScreenProps } from '../types';
 
-export default function NotFoundScreen({ navigation }: MainStackScreenProps<'Home'>) {
+export default function Home({ navigation }: MainStackScreenProps<'Home'>) {
     return (
         <View style={styles.container}>
             <ScreenTitle text={"CityPop"}/>
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        padding: 20,
+        padding: 5,
     },
     btn: {
         fontSize: 20,

@@ -4,7 +4,7 @@ import { Text, View } from '../components/Themed';
 
 import { MainStackScreenProps } from '../types';
 
-export default function NotFoundScreen({ navigation }: MainStackScreenProps<'City'>) {
+export default function City({ navigation }: MainStackScreenProps<'City'>) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>City.</Text>

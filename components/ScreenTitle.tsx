@@ -21,10 +21,9 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         width: "100%",
-        padding:100,
+        paddingVertical:110,
     },
     text: {
-        marginVertical: 7,
         fontSize: 42,
         fontWeight:"600",
         color: "black",

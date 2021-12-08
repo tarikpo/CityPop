@@ -34,11 +34,11 @@ const Stack = createNativeStackNavigator<MainStackParamList>();
 function MainNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-      <Stack.Screen name="SearchCity" component={SearchCity} options={{ headerShown: false }} />
-      <Stack.Screen name="SearchCountry" component={SearchCountry} options={{ headerShown: false }} />
-      <Stack.Screen name="CountryCities" component={CountryCities} options={{ headerShown: false }} />
-      <Stack.Screen name="City" component={City} options={{ headerShown: false }} />
+      <Stack.Screen name="Home" component={Home} options={{ headerShown: false}} />
+      <Stack.Screen name="SearchCity" component={SearchCity} options={{headerShadowVisible:false,headerBackTitleVisible:false ,headerTitle:""}} />
+      <Stack.Screen name="SearchCountry" component={SearchCountry} options={{headerShadowVisible:false,headerBackTitleVisible:false ,headerTitle:""}} />
+      <Stack.Screen name="CountryCities" component={CountryCities} options={{headerShadowVisible:false,headerBackTitleVisible:false ,headerTitle:""}} />
+      <Stack.Screen name="City" component={City}options={{headerShadowVisible:false,headerBackTitleVisible:false ,headerTitle:""}} />
 
     </Stack.Navigator>
   );
