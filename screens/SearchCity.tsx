@@ -98,7 +98,7 @@ export default function SearchCity({navigation}: MainStackScreenProps<'SearchCit
                         setKeyboardUp(true);
                     }}
                     onChangeText={(text) => setTxtInput(text)}
-                    placeholder={"Enter a city..."}
+                    placeholder={"Enter a city"}
                     style={styles.input}/>
 
                 {fetching && <ActivityIndicator style={styles.loading} size={"large"}/>}
@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
         maxWidth: 500,
         marginVertical: 10,
         fontSize: 20,
+        textAlign:"center",
     }
 
 

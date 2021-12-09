@@ -4,11 +4,16 @@ import { Text, View } from '../components/Themed';
 
 import { MainStackScreenProps } from '../types';
 
-export default function CountryCities({ navigation }: MainStackScreenProps<'CountryCities'>) {
+export default function CountryCities({ route,navigation }: MainStackScreenProps<'CountryCities'>) {
+    const {data} = route.params;
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Not found.</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('City')} style={styles.link}>
+            <TouchableOpacity onPress={() => navigation.navigate('City',{
+                cityName: data[0].countryName,
+                cityPopulation: data[0].population,
+            })} style={styles.link}>
                 <Text style={styles.linkText}>Go to home screen!</Text>
             </TouchableOpacity>
         </View>

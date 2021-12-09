@@ -19,11 +19,21 @@ export type MainStackParamList = {
     cityName:string,
     cityPopulation:number
   },
-  CountryCities: undefined;
+  CountryCities: {
+    data: CityObj[],
+  };
   SearchCity: undefined;
   SearchCountry: undefined;
 
 };
+
+export type CityObj = {
+  population: number,
+  countryName: string,
+  countryCode:string,
+  cityName:string,
+  cityPopulation:number
+}
 
 export type MainStackScreenProps<Screen extends keyof MainStackParamList> = NativeStackScreenProps<
   MainStackParamList,

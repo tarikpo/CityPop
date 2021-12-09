@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     populationTxt:{
         textAlign: "center",
         fontSize:14,
-        marginBottom: 2,
+        marginBottom: 5,
         fontWeight: "300",
         textTransform:"uppercase",
 
