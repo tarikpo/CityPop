@@ -32,10 +32,11 @@ export default function City({route, navigation}: MainStackScreenProps<'City'>) 
         <View style={styles.container}>
             <ScreenTitle text={cityName}/>
             <View style={styles.populationContainer}>
+                <Text style={styles.populationTxt}>{"population"}</Text>
                 <Text style={[styles.population, {fontWeight:"500"}]}>{formatNumber()}</Text>
-                <Text style={styles.population}>{"inhabitants"}</Text>
+                <Text style={styles.populationTxt}>{" "}</Text>
+
             </View>
-            <Button text={"Return home"} onPress={() => navigation.navigate("Home")}/>
         </View>
     );
 }
@@ -49,8 +50,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     populationContainer: {
-        marginBottom: 15,
-        paddingVertical: 15,
+        marginBottom: 10,
         borderWidth: 3,
         borderColor: "black",
         padding: 10,
@@ -61,5 +61,14 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize:30,
         fontWeight: "300",
+        paddingTop:0,
+    },
+    populationTxt:{
+        textAlign: "center",
+        fontSize:14,
+        marginBottom: 2,
+        fontWeight: "300",
+        textTransform:"uppercase",
+
     }
 });

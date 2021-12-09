@@ -2,32 +2,24 @@ import * as React from 'react';
 import {useState} from 'react';
 import {
     ActivityIndicator,
+    Alert,
     Dimensions,
     Keyboard,
     KeyboardAvoidingView,
     StyleSheet,
     TextInput,
-    View,
-    Alert
+    View
 } from 'react-native';
 import {MainStackScreenProps} from '../types';
 import ScreenTitle from "../components/ScreenTitle";
 import Button from "../components/Button";
-// @ts-ignore
+
 
 const API_URL = "http://api.geonames.org/searchJSON?&orderby=population&featureClass=P&maxRows=1&style=long&username=weknowit&name_equals="
 
 
-interface city {
-    id: number,
-    name: string,
-}
-
-
 export default function SearchCity({navigation}: MainStackScreenProps<'SearchCity'>) {
-    const [city, setCity] = useState<city | null>(null);
     const [keyboardUp, setKeyboardUp] = useState<boolean>(false);
-    const [titleHeight, setTitleHeight] = useState<number>(0);
     const [txtInput, setTxtInput] = useState<string>("");
     const [fetching, setFetching] = useState<boolean>(false);
 
@@ -46,24 +38,24 @@ export default function SearchCity({navigation}: MainStackScreenProps<'SearchCit
 
         let url = API_URL + txtInput;
         fetch(url)
-            .then((response)=>response.json())
-            .then((json)=>{
-                if(json.totalResultsCount==0){
-                    alert("The city does not exist in our database")
-                }else if(json.totalResultsCount>0){
+            .then((response) => response.json())
+            .then((json) => {
+                if (json.totalResultsCount == 0) {
+                    alert(txtInput + " does not exist in our database :/")
+                } else if (json.totalResultsCount > 0) {
                     //Example input is "Bok"
-                    if (json.geonames[0].name !== txtInput){
+                    if (json.geonames[0].name !== txtInput) {
                         Alert.alert(
-                            "We did not find "+txtInput,
-                            "Did you mean "+json.geonames[0].name+"?",
+                            "We did not find " + txtInput,
+                            "Did you mean " + json.geonames[0].name + "?",
                             [
                                 // The "Yes" button
                                 {
                                     text: "Yes",
                                     onPress: () => {
                                         navigation.navigate("City", {
-                                                cityName:json.geonames[0].name,
-                                                cityPopulation:json.geonames[0].population
+                                            cityName: json.geonames[0].name,
+                                            cityPopulation: json.geonames[0].population
                                         });
                                     },
                                 },
@@ -74,55 +66,51 @@ export default function SearchCity({navigation}: MainStackScreenProps<'SearchCit
                                 },
                             ]
                         );
-                    }else{
+                    } else {
                         navigation.navigate("City", {
-                            cityName:json.geonames[0].name,
-                            cityPopulation:json.geonames[0].population
+                            cityName: json.geonames[0].name,
+                            cityPopulation: json.geonames[0].population
                         });
                     }
 
                 }
             })
-            .catch((error)=> alert(error))
-            .finally(()=>{
+            .catch((error) => alert(error))
+            .finally(() => {
                 setFetching(false)
             });
     }
 
-
     return (
         <KeyboardAvoidingView
-            style={keyboardUp ? [styles.avoidView, {paddingTop: titleHeight * 1.1}] : styles.avoidView}
+            style={keyboardUp ? [styles.avoidView, {paddingTop: 180}] : styles.avoidView}
             behavior={"position"}
         >
             <View
                 style={styles.container}
             >
-
                 <ScreenTitle
-                    onLayout={(event) => {
-                        const {height} = event.nativeEvent.layout;
-                        setTitleHeight(height);
-
-                    }}
                     text={"SEARCH BY CITY"}
                     {...screenTitleProps}
                 />
-                <TextInput onPressIn={() => {
-                    setKeyboardUp(true);
-                }}
-                           onChangeText={(text)=>setTxtInput(text)}
-                           placeholder={"Enter a city..."}
-                           style={styles.input}/>
+                <TextInput
+                    onPressIn={() => {
+                        setKeyboardUp(true);
+                    }}
+                    onChangeText={(text) => setTxtInput(text)}
+                    placeholder={"Enter a city..."}
+                    style={styles.input}/>
 
                 {fetching && <ActivityIndicator style={styles.loading} size={"large"}/>}
 
-                {txtInput.length>0 && <Button disabled={fetching} text={fetching?"Hold on...":"Look up!"} onPress={lookUp}/>}
+                {txtInput.length > 0 &&
+                <Button disabled={fetching} text={fetching ? "Hold on..." : "Look up!"} onPress={lookUp}/>}
 
             </View>
         </KeyboardAvoidingView>
 
-    );
+    )
+        ;
 }
 
 
@@ -135,8 +123,8 @@ const styles = StyleSheet.create({
         width: width,
 
     },
-    loading:{
-      margin:20
+    loading: {
+        margin: 20
     },
     avoidView: {
         flex: 1,
@@ -151,7 +139,7 @@ const styles = StyleSheet.create({
         borderColor: "black",
         width: "90%",
         padding: 15,
-        maxWidth:500,
+        maxWidth: 500,
         marginVertical: 10,
         fontSize: 20,
     }
