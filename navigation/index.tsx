@@ -33,7 +33,11 @@ const Stack = createNativeStackNavigator<MainStackParamList>();
 
 function MainNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+        screenOptions={{
+            headerTintColor: 'black',
+            headerStyle: { backgroundColor: 'white' },
+        }}>
       <Stack.Screen name="Home" component={Home} options={{ headerShown: false}} />
       <Stack.Screen name="SearchCity" component={SearchCity} options={{headerShadowVisible:false,headerBackTitleVisible:false ,headerTitle:""}} />
       <Stack.Screen name="SearchCountry" component={SearchCountry} options={{headerShadowVisible:false,headerBackTitleVisible:false ,headerTitle:""}} />
