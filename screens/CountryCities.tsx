@@ -2,23 +2,29 @@ import * as React from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 import {Text, View} from '../components/Themed';
 
-import {MainStackScreenProps} from '../types';
+import {CityObj, MainStackScreenProps} from '../types';
 import ScreenTitle from "../components/ScreenTitle";
 import Button from "../components/Button";
 
 export default function CountryCities({route, navigation}: MainStackScreenProps<'CountryCities'>) {
     const {data} = route.params;
 
+    const goToCity = (city:CityObj) => {
+        navigation.navigate("City", {
+            cityName: city.name,
+            cityPopulation: city.population
+        });    }
 
     return (
         <View style={styles.container}>
             <ScreenTitle text={data[0].countryName}/>
-            <FlatList keyExtractor={(item)=>item.geonameId} data={data} renderItem={({item})=>(
-                <Text style={styles.item}>{item.name}</Text>
+            <FlatList style={styles.list} keyExtractor={(item)=>item.geonameId} data={data} renderItem={({item})=>(
+                <Button style={styles.item} onPress={() => goToCity(item)} text={item.name}></Button>
             )}/>
         </View>
     );
 }
+
 
 
 const styles = StyleSheet.create({
@@ -28,8 +34,31 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         padding: 20,
     },
+    list:{
+        width:"100%",
+        maxWidth:500,
+        borderTopWidth:1,
+        paddingTop:5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 6,
+    },
     item:{
-
+        marginBottom: 5,
+        borderWidth: 2,
+        borderColor: "black",
+        padding: 10,
+        width: "100%",
+        maxWidth:500,
+        fontSize:16,
+        backgroundColor: "black",
+        color: "white",
+        alignItems:"center",
     }
 
 

@@ -14,16 +14,17 @@ import {CityObj, MainStackScreenProps} from '../types';
 import ScreenTitle from "../components/ScreenTitle";
 import Button from "../components/Button";
 
+//max value is 100
+const numberOfCities = 10;
 
 const API_URL_COUNTRY = "http://api.geonames.org/searchJSON?&orderby=relevance&featureClass=P&maxRows=15&style=long&username=weknowit&q=";
-const API_URL_CITIES = "http://api.geonames.org/searchJSON?&orderby=population&featureClass=P&maxRows=15&style=long&username=weknowit&country=";
+const API_URL_CITIES = "http://api.geonames.org/searchJSON?&orderby=population&featureClass=P&maxRows="+numberOfCities+"&style=long&username=weknowit&country=";
 
 export default function SearchCountry({navigation}: MainStackScreenProps<'SearchCountry'>) {
     const [keyboardUp, setKeyboardUp] = useState<boolean>(false);
     const [txtInput, setTxtInput] = useState<string>("");
     const [fetching, setFetching] = useState<boolean>(false);
 
-    const numberOfCities = 5;
 
     const screenTitleProps: any = {};
     if (keyboardUp) {
