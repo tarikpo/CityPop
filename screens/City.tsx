@@ -1,39 +1,65 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, View } from '../components/Themed';
+import {StyleSheet} from 'react-native';
+import {Text, View} from '../components/Themed';
 
-import { MainStackScreenProps } from '../types';
+import {MainStackScreenProps} from '../types';
+import ScreenTitle from "../components/ScreenTitle";
+import Button from "../components/Button";
 
-export default function City({ route,navigation }: MainStackScreenProps<'City'>) {
-    const {cityName,cityPopulation} = route.params;
+export default function City({route, navigation}: MainStackScreenProps<'City'>) {
+    const {cityName, cityPopulation} = route.params;
+
+    const reverseString = (str:string) =>{
+        return str.split("").reverse().join("");
+    }
+
+    const formatNumber= () =>{
+        let reversedName = reverseString(cityPopulation.toString())
+        let every = 3;
+        let retArr = [];
+        let i;
+        let len;
+
+        for(i = 0, len = reversedName.length; i < len; i += every) {
+            retArr.push(reversedName.substr(i,every))
+        }
+        let retStr = retArr.join(" ");
+        let retStra = reverseString(retStr);
+        return retStra
+    }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>City {cityName} has {cityPopulation} people living in it.</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.link}>
-                <Text style={styles.linkText}>Go to home screen!</Text>
-            </TouchableOpacity>
+            <ScreenTitle text={cityName}/>
+            <View style={styles.populationContainer}>
+                <Text style={[styles.population, {fontWeight:"500"}]}>{formatNumber()}</Text>
+                <Text style={styles.population}>{"inhabitants"}</Text>
+            </View>
+            <Button text={"Return home"} onPress={() => navigation.navigate("Home")}/>
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         padding: 20,
     },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    link: {
-        marginTop: 15,
+    populationContainer: {
+        marginBottom: 15,
         paddingVertical: 15,
+        borderWidth: 3,
+        borderColor: "black",
+        padding: 10,
+        width: "90%",
+        maxWidth:500,
     },
-    linkText: {
-        fontSize: 14,
-        color: '#2e78b7',
-    },
+    population:{
+        textAlign: "center",
+        fontSize:30,
+        fontWeight: "300",
+    }
 });
