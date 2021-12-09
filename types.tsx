@@ -31,8 +31,8 @@ export type CityObj = {
   population: number,
   countryName: string,
   countryCode:string,
-  cityName:string,
-  cityPopulation:number
+  name:string,
+  geonameId:string,
 }
 
 export type MainStackScreenProps<Screen extends keyof MainStackParamList> = NativeStackScreenProps<

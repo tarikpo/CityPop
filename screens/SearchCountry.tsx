@@ -15,13 +15,15 @@ import ScreenTitle from "../components/ScreenTitle";
 import Button from "../components/Button";
 
 
-const API_URL = "http://api.geonames.org/searchJSON?&orderby=population&featureClass=P&maxRows=15&style=long&username=weknowit&q="
-
+const API_URL_COUNTRY = "http://api.geonames.org/searchJSON?&orderby=relevance&featureClass=P&maxRows=15&style=long&username=weknowit&q=";
+const API_URL_CITIES = "http://api.geonames.org/searchJSON?&orderby=population&featureClass=P&maxRows=15&style=long&username=weknowit&country=";
 
 export default function SearchCountry({navigation}: MainStackScreenProps<'SearchCountry'>) {
     const [keyboardUp, setKeyboardUp] = useState<boolean>(false);
     const [txtInput, setTxtInput] = useState<string>("");
     const [fetching, setFetching] = useState<boolean>(false);
+
+    const numberOfCities = 5;
 
     const screenTitleProps: any = {};
     if (keyboardUp) {
@@ -36,23 +38,22 @@ export default function SearchCountry({navigation}: MainStackScreenProps<'Search
         setKeyboardUp(false);
         Keyboard.dismiss();
 
-        let url = API_URL + txtInput;
+        let url = API_URL_COUNTRY + txtInput;
         fetch(url)
             .then((response) => response.json())
             .then((json) => {
                 if (json.totalResultsCount == 0) {
                     alert(txtInput + " does not exist in our database :/")
                 } else if (json.totalResultsCount > 0) {
-                    let found:boolean = false;
-                    let countryCode:string = json.geonames[0].countryCode;
+                    let found: boolean = false;
+                    let countryCode: string = json.geonames[0].countryCode;
 
-                    json.geonames.forEach((obj:any)=>{
-                        if(obj.countryName===txtInput){
-                            found=true;
-                            countryCode=obj.countryCode;
+                    json.geonames.forEach((obj: any) => {
+                        if (obj.countryName === txtInput) {
+                            found = true;
+                            countryCode = obj.countryCode;
                         }
                     })
-
                     if (!found) {
                         Alert.alert(
                             "We did not find " + txtInput,
@@ -62,9 +63,10 @@ export default function SearchCountry({navigation}: MainStackScreenProps<'Search
                                 {
                                     text: "Yes",
                                     onPress: () => {
-                                        let cities:CityObj[] = getCities(json.geonames,countryCode);
-                                        navigation.navigate("CountryCities", {
-                                            data: cities,
+                                        getCities(countryCode).then((cities) => {
+                                            navigation.navigate("CountryCities", {
+                                                data: cities,
+                                            });
                                         });
                                     },
                                 },
@@ -76,10 +78,12 @@ export default function SearchCountry({navigation}: MainStackScreenProps<'Search
                             ]
                         );
                     } else {
-                        let cities:CityObj[] = getCities(json.geonames,countryCode);
-                        navigation.navigate("CountryCities", {
-                            data: cities,
+                        getCities(countryCode).then((cities) => {
+                            navigation.navigate("CountryCities", {
+                                data: cities,
+                            });
                         });
+
                     }
 
                 }
@@ -90,14 +94,15 @@ export default function SearchCountry({navigation}: MainStackScreenProps<'Search
             });
     }
 
-    const getCities = (citiesArr:CityObj[],countryCode:string) => {
-        let reArr:CityObj[]=[];
-        citiesArr.forEach((obj)=>{
-            if (obj.countryCode ===  countryCode){
-                reArr.push(obj);
-            }
-        })
+    async function getCities(countryCode: string) {
+        let reArr: CityObj[]
+        const response = await fetch(API_URL_CITIES + countryCode);
+        const cities = await response.json();
+
+        reArr = cities.geonames.slice(0, numberOfCities);
+
         return reArr;
+
     }
 
     return (
@@ -161,7 +166,7 @@ const styles = StyleSheet.create({
         maxWidth: 500,
         marginVertical: 10,
         fontSize: 20,
-        textAlign:"center",
+        textAlign: "center",
     }
 
 
