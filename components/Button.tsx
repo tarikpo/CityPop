@@ -3,7 +3,7 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 
 
 import Colors from '../constants/Colors';
-import {Text, View} from './Themed';
+import {Text} from './Themed';
 
 interface Props{
     text: string,
@@ -12,6 +12,14 @@ interface Props{
     style?:any,
 }
 
+/**
+ * Button component for the application
+ * @param style - Optional prop to override the styling of the component
+ * @param text - The text that will be displayed in the button
+ * @param onPress - Function which is executed once the button is pressed
+ * @param disabled - Optional prop which disables the button
+ * @constructor
+ */
 const Button: React.FC<Props> = ({style,text, onPress , disabled=false}) =>{
     return (
         <TouchableOpacity disabled={disabled} onPress={onPress} style={style?style:disabled?[styles.container,{backgroundColor:"grey"}]:styles.container}>

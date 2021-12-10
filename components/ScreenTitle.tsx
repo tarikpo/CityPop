@@ -13,6 +13,14 @@ interface Props{
 
 }
 
+/**
+ * Component which display a title on the screen
+ * @param text - The text that will
+ * @param onLayout - Function which uses React Native's LayoutChangeEvent
+ * @param fontSize - Varible to override the fontSize of the title text
+ * @param paddingBottom - Varible to override the paddingBottom of ScreenTitle
+ * @constructor
+ */
 const ScreenTitle: React.FC<Props> = ({text,onLayout, fontSize,paddingBottom}) =>{
     return (
         <View onLayout={onLayout} style={paddingBottom?[styles.container,{paddingBottom:paddingBottom}]:styles.container}>

@@ -3,8 +3,6 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 declare global {
@@ -13,6 +11,10 @@ declare global {
   }
 }
 
+/**
+ * What screens the main navigator can navigate to
+ * and what parameters have to be sent to respective screen
+ */
 export type MainStackParamList = {
   Home: undefined;
   City:{
@@ -27,6 +29,9 @@ export type MainStackParamList = {
 
 };
 
+/**
+ * Object that represents city from fetching has to have at least these attributes
+ */
 export type CityObj = {
   population: number,
   countryName: string,

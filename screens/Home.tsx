@@ -1,11 +1,15 @@
 import * as React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 import ScreenTitle from '../components/ScreenTitle';
 import Button from '../components/Button';
-
 import { MainStackScreenProps } from '../types';
 
+/**
+ * Home screen
+ * @param navigation - Used to navigate to next screen
+ * @constructor
+ */
 export default function Home({ navigation }: MainStackScreenProps<'Home'>) {
     return (
         <View style={styles.container}>

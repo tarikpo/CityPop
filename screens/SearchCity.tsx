@@ -14,20 +14,24 @@ import {MainStackScreenProps} from '../types';
 import ScreenTitle from "../components/ScreenTitle";
 import Button from "../components/Button";
 
-
+// The input will be appended to this constant when fetching
 const API_URL = "http://api.geonames.org/searchJSON?&orderby=population&featureClass=P&maxRows=1&style=long&username=weknowit&name_equals="
 
-
+/**
+ * Screen where user can search for a city
+ * @param navigation - Used to navigate to next screen
+ * @constructor
+ */
 export default function SearchCity({navigation}: MainStackScreenProps<'SearchCity'>) {
     const [keyboardUp, setKeyboardUp] = useState<boolean>(false);
     const [txtInput, setTxtInput] = useState<string>("");
     const [fetching, setFetching] = useState<boolean>(false);
 
+    // This will be used to modify ScreenTitle when keyboard is visible
     const screenTitleProps: any = {};
     if (keyboardUp) {
         screenTitleProps["fontSize"] = 20;
         screenTitleProps["paddingBottom"] = 5;
-
     }
 
 
@@ -53,7 +57,7 @@ export default function SearchCity({navigation}: MainStackScreenProps<'SearchCit
                                 {
                                     text: "Yes",
                                     onPress: () => {
-                                        navigation.navigate("City", {
+                                        navigation.replace("City", {
                                             cityName: json.geonames[0].name,
                                             cityPopulation: json.geonames[0].population
                                         });
@@ -67,7 +71,7 @@ export default function SearchCity({navigation}: MainStackScreenProps<'SearchCit
                             ]
                         );
                     } else {
-                        navigation.navigate("City", {
+                        navigation.replace("City", {
                             cityName: json.geonames[0].name,
                             cityPopulation: json.geonames[0].population
                         });

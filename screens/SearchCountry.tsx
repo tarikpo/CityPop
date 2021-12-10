@@ -14,25 +14,31 @@ import {CityObj, MainStackScreenProps} from '../types';
 import ScreenTitle from "../components/ScreenTitle";
 import Button from "../components/Button";
 
-//max value is 100
+//max value is 1000 according to the api
 const numberOfCities = 10;
 
+// The input will be appended to the constant when fetching
 const API_URL_COUNTRY = "http://api.geonames.org/searchJSON?&orderby=relevance&featureClass=P&maxRows=15&style=long&username=weknowit&q=";
+// The country code of the chosen country will be appended to the constant when fetching for cities
 const API_URL_CITIES = "http://api.geonames.org/searchJSON?&orderby=population&featureClass=P&maxRows="+numberOfCities+"&style=long&username=weknowit&country=";
 
+/**
+ * Screen where user can search for a country
+ * @param navigation - Used to navigate to next screen
+ * @constructor
+ */
 export default function SearchCountry({navigation}: MainStackScreenProps<'SearchCountry'>) {
     const [keyboardUp, setKeyboardUp] = useState<boolean>(false);
     const [txtInput, setTxtInput] = useState<string>("");
     const [fetching, setFetching] = useState<boolean>(false);
 
-
+    // This will be used to modify ScreenTitle when keyboard is visible
     const screenTitleProps: any = {};
     if (keyboardUp) {
         screenTitleProps["fontSize"] = 20;
         screenTitleProps["paddingBottom"] = 5;
 
     }
-
 
     const lookUp = () => {
         setFetching(true);
@@ -44,9 +50,11 @@ export default function SearchCountry({navigation}: MainStackScreenProps<'Search
             .then((response) => response.json())
             .then((json) => {
                 if (json.totalResultsCount == 0) {
-                    alert(txtInput + " does not exist in our database :/")
+                    alert(txtInput + " does not exist in our database :(")
                 } else if (json.totalResultsCount > 0) {
+                    // Checks if the requested country is found
                     let found: boolean = false;
+                    // If country is not found recommend the first country
                     let countryCode: string = json.geonames[0].countryCode;
 
                     json.geonames.forEach((obj: any) => {
@@ -65,7 +73,7 @@ export default function SearchCountry({navigation}: MainStackScreenProps<'Search
                                     text: "Yes",
                                     onPress: () => {
                                         getCities(countryCode).then((cities) => {
-                                            navigation.navigate("CountryCities", {
+                                            navigation.replace("CountryCities", {
                                                 data: cities,
                                             });
                                         });
@@ -80,7 +88,7 @@ export default function SearchCountry({navigation}: MainStackScreenProps<'Search
                         );
                     } else {
                         getCities(countryCode).then((cities) => {
-                            navigation.navigate("CountryCities", {
+                            navigation.replace("CountryCities", {
                                 data: cities,
                             });
                         });
@@ -95,15 +103,18 @@ export default function SearchCountry({navigation}: MainStackScreenProps<'Search
             });
     }
 
+    /**
+     * Fetches for cities of a given country
+     * @param countryCode - Code of the country we want to get cities from
+     */
     async function getCities(countryCode: string) {
-        let reArr: CityObj[]
-        const response = await fetch(API_URL_CITIES + countryCode);
-        const cities = await response.json();
+        let reArr: CityObj[];
+        let json = await fetch(API_URL_CITIES + countryCode)
+            .then((response)=>response.json())
+            .catch((error) => alert(error))
 
-        reArr = cities.geonames.slice(0, numberOfCities);
-
+        reArr = json.geonames.slice(0, numberOfCities);
         return reArr;
-
     }
 
     return (

@@ -1,18 +1,25 @@
 import * as React from 'react';
 import {StyleSheet} from 'react-native';
 import {Text, View} from '../components/Themed';
-
 import {MainStackScreenProps} from '../types';
 import ScreenTitle from "../components/ScreenTitle";
-import Button from "../components/Button";
 
-export default function City({route, navigation}: MainStackScreenProps<'City'>) {
+
+/**
+ * Screen used to show the population of a city
+ * @param route - Used to get the params sent to this screen
+ * @constructor
+ */
+export default function City({route}: MainStackScreenProps<'City'>) {
     const {cityName, cityPopulation} = route.params;
 
     const reverseString = (str:string) =>{
         return str.split("").reverse().join("");
     }
 
+    /**
+     * Makes spaces after every 3:rd character. 1000000 will become 1 000 000
+     */
     const formatNumber= () =>{
         let reversedName = reverseString(cityPopulation.toString())
         let every = 3;

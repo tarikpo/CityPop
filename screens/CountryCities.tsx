@@ -1,16 +1,23 @@
 import * as React from 'react';
 import {FlatList, StyleSheet} from 'react-native';
-import {Text, View} from '../components/Themed';
+import {View} from '../components/Themed';
 
 import {CityObj, MainStackScreenProps} from '../types';
 import ScreenTitle from "../components/ScreenTitle";
 import Button from "../components/Button";
 
+
+/**
+ * Screen used for showing cities from a chosen country
+ * @param route - Used to get the params sent to this screen
+ * @param navigation - Used to navigate to next screen
+ * @constructor
+ */
 export default function CountryCities({route, navigation}: MainStackScreenProps<'CountryCities'>) {
     const {data} = route.params;
 
     const goToCity = (city:CityObj) => {
-        navigation.navigate("City", {
+        navigation.replace("City", {
             cityName: city.name,
             cityPopulation: city.population
         });    }

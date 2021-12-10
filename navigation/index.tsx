@@ -15,8 +15,13 @@ import CountryCities from '../screens/CountryCities';
 import SearchCity from '../screens/SearchCity';
 import SearchCountry from '../screens/SearchCountry';
 import { MainStackParamList } from '../types';
-import LinkingConfiguration from './LinkingConfiguration';
 
+
+/**
+ * Navigation used in the App
+ * @param colorScheme - Which chooses theme
+ * @constructor
+ */
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
       <NavigationContainer
