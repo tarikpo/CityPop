@@ -16,7 +16,6 @@ import Button from "../components/Button";
 
 //max value is 1000 according to the api
 const numberOfCities = 10;
-
 // The input will be appended to the constant when fetching
 const API_URL_COUNTRY = "http://api.geonames.org/searchJSON?&orderby=relevance&featureClass=P&maxRows=15&style=long&username=weknowit&q=";
 // The country code of the chosen country will be appended to the constant when fetching for cities
